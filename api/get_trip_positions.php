@@ -1,0 +1,1 @@
+<?php require '../config.php'; header('Content-Type: application/json'); $id=intval($_GET['booking_id']); $stmt=$pdo->prepare('SELECT lat,lng,recorded_at FROM trip_positions WHERE booking_id=? ORDER BY id ASC'); $stmt->execute([$id]); echo json_encode($stmt->fetchAll()); ?>

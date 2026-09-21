@@ -1,0 +1,7 @@
+<?php require '../config.php'; if(!is_logged()) header('Location: /lftms_full/login.php'); $u=current_user(); if($u['role']!='admin'){ echo 'Access denied'; exit; }
+if($_SERVER['REQUEST_METHOD']=='POST'){ $vno=$_POST['vehicle_no']; $cap=intval($_POST['capacity']); $pdo->prepare('INSERT INTO vehicles(vehicle_no,capacity_kg,driver_name,driver_phone) VALUES(?,?,?,?)')->execute([$vno,$cap,$_POST['driver_name'],$_POST['driver_phone']]); header('Location: vehicles.php'); }
+$rows=$pdo->query('SELECT * FROM vehicles')->fetchAll(); include '../inc/header.php'; ?>
+<h3>Vehicles</h3>
+<form method="post" class="row g-2"><div class="col-md-3"><input name="vehicle_no" class="form-control" placeholder="Vehicle No" required></div><div class="col-md-2"><input name="capacity" class="form-control" placeholder="Capacity (kg)" required></div><div class="col-md-3"><input name="driver_name" class="form-control" placeholder="Driver name"></div><div class="col-md-2"><input name="driver_phone" class="form-control" placeholder="Driver phone"></div><div class="col-md-2"><button class="btn btn-success">Add</button></div></form>
+<table class="table mt-3"><tr><th>ID</th><th>Vehicle</th><th>Capacity</th><th>Driver</th></tr><?php foreach($rows as $r): ?><tr><td><?php echo $r['id'];?></td><td><?php echo esc($r['vehicle_no']);?></td><td><?php echo $r['capacity_kg'];?></td><td><?php echo esc($r['driver_name']);?></td></tr><?php endforeach; ?></table>
+<?php include '../inc/footer.php'; ?>
